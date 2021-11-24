@@ -1,0 +1,24 @@
+{
+  "name": "back-integral-m05-desafio",
+  "version": "1.0.0",
+  "description": "![](https://i.imgur.com/xG74tOh.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasRocha2308/back-integral-m05-desafio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucasRocha2308/back-integral-m05-desafio/issues"
+  },
+  "homepage": "https://github.com/LucasRocha2308/back-integral-m05-desafio#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.7.1"
+  }
+}
