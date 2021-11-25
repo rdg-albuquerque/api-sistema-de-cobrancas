@@ -5,8 +5,8 @@ create table if not exists usuarios (
   	nome text not null,
   	email text not null unique,
   	senha text not null,
-  	cpf integer,
-  	telefone integer 
+  	cpf text,
+  	telefone text 
 );
 
 create table if not exists clientes (
@@ -15,7 +15,7 @@ create table if not exists clientes (
   	nome text not null,
   	email text not null unique,
   	telefone text not null,
-  	cpf integer not null, 
+  	cpf text not null, 
   	endereco text,
   	complemento text,
   	cep integer,
