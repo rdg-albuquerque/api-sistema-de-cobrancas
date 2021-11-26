@@ -11,7 +11,7 @@ const rotas = express();
 rotas.post('/usuario', usuarios.cadastrarUsuario);
 rotas.post('/login', login.login);
 
-// validador 
+// validadores 
 rotas.get('/validador', validadores.validarEmail)
 
 rotas.use(validarUsuario);
