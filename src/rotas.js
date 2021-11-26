@@ -3,12 +3,16 @@ const usuarios = require('./controladores/usuarios');
 const login = require('./controladores/login');
 const validarUsuario = require('./midleware/validarUsuarios');
 const clientes = require('./controladores/clientes');
+const validadores = require('./controladores/validadores')
 
 const rotas = express();
 
 
 rotas.post('/usuario', usuarios.cadastrarUsuario);
 rotas.post('/login', login.login);
+
+// validador 
+rotas.get('/validador', validadores.validarEmail)
 
 rotas.use(validarUsuario);
 
