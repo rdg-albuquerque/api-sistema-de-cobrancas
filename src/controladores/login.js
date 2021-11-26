@@ -10,13 +10,13 @@ const login = async (req, res) => {
 
     }
 
-    let query = "SELECT id, email, senha FROM usuarios WHERE email = $1";
+    let query = "SELECT * FROM usuarios WHERE email = $1";
     const emailExistente = await conexao.query(query, [email]);
     if (emailExistente.rowCount === 0) {
         return res.status(404).json({ mensagem: "Usuário ou senha inválido" });
     }
 
-    const { id, email: emailCadastrado, senha: senhaCadastrada } = emailExistente.rows[0];
+    const { id, nome, email: emailCadastrado, cpf, telefone, senha: senhaCadastrada } = emailExistente.rows[0];
     const senhaValida = await bcrypt.compare(senha, senhaCadastrada);
     if (!senhaValida) {
         return res.status(400).json({ mensagem: "Usuário ou senha inválidos" });
@@ -24,7 +24,7 @@ const login = async (req, res) => {
 
 
     const token = jwt.sign({ id }, segredo, { expiresIn: "2h" });
-    return res.status(201).json({ token });
+    return res.status(201).json({ token, dados_usuario:{nome, email, cpf, telefone} });
 
 }
 
