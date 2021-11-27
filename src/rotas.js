@@ -1,27 +1,26 @@
-const express = require('express');
-const usuarios = require('./controladores/usuarios');
-const login = require('./controladores/login');
-const validarUsuario = require('./midleware/validarUsuarios');
-const clientes = require('./controladores/clientes');
-const validadores = require('./controladores/validadores')
+const express = require("express");
+const usuarios = require("./controladores/usuarios");
+const login = require("./controladores/login");
+const validarUsuario = require("./midleware/validarUsuarios");
+const clientes = require("./controladores/clientes");
+const validadores = require("./controladores/validadores");
 
 const rotas = express();
 
+rotas.post("/usuario", usuarios.cadastrarUsuario);
+rotas.post("/login", login.login);
 
-rotas.post('/usuario', usuarios.cadastrarUsuario);
-rotas.post('/login', login.login);
-
-// validadores 
-rotas.get('/validador', validadores.validarEmail)
+// validadores
+rotas.post("/validador", validadores.validarEmail);
 
 rotas.use(validarUsuario);
 
 //usuario
-rotas.get('/usuario', usuarios.detalharUsuario);
-rotas.put('/usuario', usuarios.atualizarUsuario);
+rotas.get("/usuario", usuarios.detalharUsuario);
+rotas.put("/usuario", usuarios.atualizarUsuario);
 
 //cliente
-rotas.post('/cliente', clientes.cadastrarCliente);
-rotas.get('/cliente', clientes.listarClientes);
+rotas.post("/cliente", clientes.cadastrarCliente);
+rotas.get("/cliente", clientes.listarClientes);
 
 module.exports = rotas;
