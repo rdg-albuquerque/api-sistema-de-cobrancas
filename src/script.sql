@@ -5,7 +5,7 @@ create table if not exists usuarios (
   	nome text not null,
   	email text not null unique,
   	senha text not null,
-  	cpf text,
+  	cpf text unique,
   	telefone text 
 );
 

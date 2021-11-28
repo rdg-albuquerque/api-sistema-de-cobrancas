@@ -8,12 +8,14 @@ const validarEmail = async (req, res) => {
       [email]
     );
     if (quantidadeUsuarios > 0) {
-      return res.status(400).json("O e-mail informado já está em uso");
+      return res
+        .status(400)
+        .json({ mensagem: "O e-mail informado já está em uso" });
     }
 
     res.json("E-mail válido");
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ mensagem: error.message });
   }
 };
 
