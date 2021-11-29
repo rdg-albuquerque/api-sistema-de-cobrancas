@@ -1,4 +1,5 @@
 const conexao = require("../conexao");
+const schemaCadastroCliente = require('../validacoes/schemaCadastroClientes');
 
 const cadastrarCliente = async (req, res) => {
   const { usuario } = req;
@@ -15,23 +16,12 @@ const cadastrarCliente = async (req, res) => {
     uf,
   } = req.body;
 
-  if (!nome) {
-    return res.status(400).json({ mensagem: "O campo nome é obrigatorio" });
-  }
-
-  if (!email) {
-    return res.status(400).json({ mensagem: "O campo email é obrigatorio" });
-  }
-
-  if (!telefone) {
-    return res.status(400).json({ mensagem: "O campo telefone é obrigatorio" });
-  }
-
-  if (!cpf) {
-    return res.status(400).json({ mensagem: "O campo cpf é obrigatorio" });
-  }
 
   try {
+
+    await schemaCadastroCliente.validate(req.body);
+
+
     const { rowCount: qtdEmails } = await conexao.query(
       "select * from clientes where email = $1",
       [email]
