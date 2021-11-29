@@ -2,13 +2,15 @@ const conexao = require("../conexao");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const segredo = require("../segredo");
+const schemaLogin = require("../validacoes/schemaLogin");
 
 const login = async (req, res) => {
     const { email, senha } = req.body;
     if (!email || !senha) {
         return res.status(400).json({ mensagem: "E-mail e senha são obrigatórios" });
-
     }
+
+    await schemaLogin.validate(req.body)
 
     let query = "SELECT * FROM usuarios WHERE email = $1";
     const emailExistente = await conexao.query(query, [email]);
