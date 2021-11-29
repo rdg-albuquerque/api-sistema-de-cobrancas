@@ -15,10 +15,10 @@ create table if not exists clientes (
   	nome text not null,
   	email text not null unique,
   	telefone text not null,
-  	cpf text not null, 
+  	cpf text not null unique, 
   	endereco text,
   	complemento text,
-  	cep integer,
+  	cep text,
   	bairro text,
   	cidade text,
   	uf text
