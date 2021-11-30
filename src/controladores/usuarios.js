@@ -2,16 +2,14 @@ const conexao = require("../conexao");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const segredo = require("../segredo");
-const schemaCadastroUsuario = require('../validacoes/schemaCadastroUsuarios');
-const schemaAtualizarUsuario = require('../validacoes/schemaAtualizarUsuarios');
+const schemaCadastroUsuario = require("../validacoes/schemaCadastroUsuarios");
+const schemaAtualizarUsuario = require("../validacoes/schemaAtualizarUsuarios");
 
 const cadastrarUsuario = async (req, res) => {
   const { nome, email, senha } = req.body;
-  
-  try {
 
+  try {
     await schemaCadastroUsuario.validate(req.body);
-  
 
     const { rowCount: quantidadeUsuarios } = await conexao.query(
       "select * from usuarios where email = $1",
@@ -25,7 +23,6 @@ const cadastrarUsuario = async (req, res) => {
     }
 
     const senhaCriptografada = await bcrypt.hash(senha, 10);
-
 
     const query =
       "INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)";
@@ -43,7 +40,7 @@ const cadastrarUsuario = async (req, res) => {
 
     return res.status(201).json();
   } catch (error) {
-    return res.status(400).json(error.message);
+    return res.status(400).json({ mensagem: error.message });
   }
 };
 
@@ -57,11 +54,8 @@ const atualizarUsuario = async (req, res) => {
   const { usuario } = req;
   const { nome, email, cpf, telefone, senha } = req.body;
 
-  
   try {
-
     await schemaAtualizarUsuario.validate(req.body);
-
 
     if (email !== usuario.email) {
       const validarEmail = await conexao.query(
