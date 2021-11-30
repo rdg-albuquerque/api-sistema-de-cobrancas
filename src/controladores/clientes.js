@@ -44,10 +44,9 @@ const cadastrarCliente = async (req, res) => {
     }
 
     const query =
-      "insert into clientes (usuario_id, nome, email, telefone, cpf, endereco, complemento, cep, bairro, cidade, uf) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)";
+      "insert into clientes (nome, email, telefone, cpf, endereco, complemento, cep, bairro, cidade, uf) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)";
 
     const clienteCadastrado = await conexao.query(query, [
-      usuario.id,
       nome,
       email,
       telefone,
@@ -73,12 +72,10 @@ const cadastrarCliente = async (req, res) => {
 };
 
 const listarClientes = async (req, res) => {
-  const { usuario } = req;
-
+  
   try {
     const listaDeClientes = await conexao.query(
-      "select * from clientes where usuario_id = $1",
-      [usuario.id]
+      "select * from clientes"
     );
 
     return res.status(200).json(listaDeClientes.rows);
@@ -87,7 +84,26 @@ const listarClientes = async (req, res) => {
   }
 };
 
+const detalharCliente = async (req, res) => {
+  const {id} = req.params;
+
+  try {
+
+    const buscarCliente = await conexao.query("select * from clientes where id = $1", [id]);
+
+    if (buscarCliente.rowCount === 0) {
+      return res.status(404).json({mensagem: "Cliente não encontrado"});
+    }
+
+    return res.status(200).json(buscarCliente.rows[0]);
+    
+  } catch (error) {
+    return res.status(404).json({ mensagem: error.message });
+  }
+}
+
 module.exports = {
   cadastrarCliente,
   listarClientes,
+  detalharCliente
 };
