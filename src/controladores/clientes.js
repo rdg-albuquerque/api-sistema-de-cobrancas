@@ -79,6 +79,16 @@ const listarClientes = async (req, res) => {
       "select * from clientes"
     );
 
+    for (cliente of listaDeClientes){
+      const {rowCount} = await conexao.query('select * from cobrancas where cliente_id = $1 and data_vencimento < current_date', [cliente.id]);
+
+      if (rowCount > 0){
+        cliente.status = 'inadimplente'
+      } else {
+        cliente.status = 'em dia'
+      }
+    }
+
     return res.status(200).json(listaDeClientes.rows);
   } catch (error) {
     return res.status(404).json({ mensagem: error.message });
