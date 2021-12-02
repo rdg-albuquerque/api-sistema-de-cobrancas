@@ -23,3 +23,13 @@ create table if not exists clientes (
   	cidade text,
   	uf text
 );
+
+create table if not exists cobrancas (
+	id serial primary key,
+  	cliente_id integer  not null references clientes (id),
+  	nome text not null,
+  	descricao text not null unique,
+  	data_vencimento text not null,
+  	valor text not null,
+  	paga boolean not null 
+);
