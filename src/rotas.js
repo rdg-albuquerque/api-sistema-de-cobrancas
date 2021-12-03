@@ -24,6 +24,7 @@ rotas.put("/usuario", usuarios.atualizarUsuario);
 rotas.post("/cliente", clientes.cadastrarCliente);
 rotas.get("/cliente", clientes.listarClientes);
 rotas.get("/cliente/:id", clientes.detalharCliente);
+rotas.put("/cliente/:id", clientes.editarCliente);
 
 // cobrancas
 rotas.get('/cobrancas', cobrancas.listarCobrancas);
