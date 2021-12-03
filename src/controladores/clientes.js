@@ -1,5 +1,7 @@
 const conexao = require("../conexao");
 const schemaCadastroCliente = require('../validacoes/schemaCadastroClientes');
+const datefns = require('date-fns');
+
 
 const cadastrarCliente = async (req, res) => {
   const { usuario } = req;
@@ -72,23 +74,27 @@ const cadastrarCliente = async (req, res) => {
 };
 
 const listarClientes = async (req, res) => {
+
+  const agora = new Date();
+  const dataFormatada = datefns.format(agora, "yyy-MM-dd");
   
   try {
-    const listaDeClientes = await conexao.query(
-      "select * from clientes"
+    const {rows: clientes} = await conexao.query(
+      "select * from clientes left join cobrancas on clientes.id = cobrancas.cliente_id"
     );
 
-    for (cliente of listaDeClientes){
-      const {rowCount} = await conexao.query('select * from cobrancas where cliente_id = $1 and data_vencimento < current_date', [cliente.id]);
-
-      if (rowCount > 0){
-        cliente.status = 'inadimplente'
+    for (cliente of clientes){
+      if (cliente.paga === false){
+        if (cliente.data_vencimento < dataFormatada){
+          cliente.status = 'Inadimplente'
+        } else {
+          cliente.status = 'Em dia'
+        }
       } else {
-        cliente.status = 'em dia'
+        cliente.status = 'Em dia'
       }
-    }
-
-    return res.status(200).json(listaDeClientes.rows);
+    } 
+    return res.status(200).json(clientes);
   } catch (error) {
     return res.status(404).json({ mensagem: error.message });
   }
@@ -104,6 +110,7 @@ const detalharCliente = async (req, res) => {
     if (buscarCliente.rowCount === 0) {
       return res.status(404).json({mensagem: "Cliente não encontrado"});
     }
+
 
     return res.status(200).json(buscarCliente.rows[0]);
     
