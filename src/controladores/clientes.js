@@ -80,22 +80,23 @@ const listarClientes = async (req, res) => {
   const dataFormatada = datefns.format(agora, "yyy-MM-dd");
   
   try {
-    const {rows: clientes} = await conexao.query(
-      "select * from clientes left join cobrancas on clientes.id = cobrancas.cliente_id"
+    const  {rows: listaDeClientes} = await conexao.query(
+      "select * from clientes"
     );
 
-    for (cliente of clientes){
-      if (cliente.paga === false){
-        if (cliente.data_vencimento < dataFormatada){
-          cliente.status = 'Inadimplente'
-        } else {
-          cliente.status = 'Em dia'
-        }
+    for (let cliente of listaDeClientes){
+
+      const {rowCount} = await conexao.query("select * from cobrancas where cliente_id = $1 and data_vencimento < $2 and paga = $3",[cliente.id, dataFormatada, false]);
+
+      if (rowCount > 0){
+        cliente.status = 'Inadimplente'
       } else {
         cliente.status = 'Em dia'
       }
+
     } 
-    return res.status(200).json(clientes);
+
+    return res.status(200).json(listaDeClientes);
   } catch (error) {
     return res.status(404).json({ mensagem: error.message });
   }
