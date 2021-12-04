@@ -1,7 +1,6 @@
 const conexao = require("../conexao");
-const schemaCadastroCliente = require('../validacoes/schemaCadastroClientes');
-const datefns = require('date-fns');
-
+const schemaCadastroCliente = require("../validacoes/schemaCadastroClientes");
+const datefns = require("date-fns");
 
 const cadastrarCliente = async (req, res) => {
   const { usuario } = req;
@@ -18,11 +17,8 @@ const cadastrarCliente = async (req, res) => {
     uf,
   } = req.body;
 
-
   try {
-
     await schemaCadastroCliente.validate(req.body);
-
 
     const { rowCount: qtdEmails } = await conexao.query(
       "select * from clientes where email = $1",
@@ -75,30 +71,27 @@ const cadastrarCliente = async (req, res) => {
 };
 
 const listarClientes = async (req, res) => {
-
   const agora = new Date();
   const dataFormatada = datefns.format(agora, "yyy-MM-dd");
 
   try {
-
-
-    const { rows: clientes } = await conexao.query(
-      "select * from clientes left join cobrancas on clientes.id = cobrancas.cliente_id"
+    const { rows: listaDeClientes } = await conexao.query(
+      "select * from clientes"
     );
+    for (let cliente of listaDeClientes) {
+      const { rowCount } = await conexao.query(
+        "select * from cobrancas where cliente_id = $1 and data_vencimento < $2 and paga = $3",
+        [cliente.id, dataFormatada, false]
+      );
 
-    for (cliente of clientes) {
-      if (cliente.paga === false) {
-        if (cliente.data_vencimento < dataFormatada) {
-          cliente.status = 'Inadimplente'
-        } else {
-          cliente.status = 'Em dia'
-        }
+      if (rowCount > 0) {
+        cliente.status = "Inadimplente";
       } else {
-        cliente.status = 'Em dia'
+        cliente.status = "Em dia";
       }
     }
-    return res.status(200).json(clientes);
 
+    return res.status(200).json(listaDeClientes);
   } catch (error) {
     return res.status(404).json({ mensagem: error.message });
   }
@@ -108,25 +101,25 @@ const detalharCliente = async (req, res) => {
   const { id } = req.params;
 
   try {
-
-    const buscarCliente = await conexao.query("select * from clientes where id = $1", [id]);
+    const buscarCliente = await conexao.query(
+      "select * from clientes where id = $1",
+      [id]
+    );
 
     if (buscarCliente.rowCount === 0) {
       return res.status(404).json({ mensagem: "Cliente não encontrado" });
     }
 
-
     return res.status(200).json(buscarCliente.rows[0]);
-
   } catch (error) {
     return res.status(404).json({ mensagem: error.message });
   }
-}
+};
 
 const editarCliente = async (req, res) => {
   const { usuario } = req;
-  let { id: id_cliente } = req.params
-  id_cliente = Number(id_cliente)
+  let { id: id_cliente } = req.params;
+  id_cliente = Number(id_cliente);
   const {
     nome,
     email,
@@ -140,11 +133,8 @@ const editarCliente = async (req, res) => {
     uf,
   } = req.body;
 
-
   try {
-
     await schemaCadastroCliente.validate(req.body);
-
 
     const { rowCount: qtdEmails } = await conexao.query(
       "select * from clientes where email = $1",
@@ -182,7 +172,7 @@ const editarCliente = async (req, res) => {
       bairro,
       cidade,
       uf,
-      id_cliente
+      id_cliente,
     ]);
 
     if (clienteEditado.rowCount === 0) {
@@ -197,10 +187,9 @@ const editarCliente = async (req, res) => {
   }
 };
 
-
 module.exports = {
   cadastrarCliente,
   listarClientes,
   detalharCliente,
-  editarCliente
+  editarCliente,
 };
