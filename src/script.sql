@@ -11,7 +11,7 @@ create table if not exists usuarios (
 
 create table if not exists clientes (
 	id serial primary key,
-	inadimplencia boolean default false
+	inadimplencia boolean default false,
   	nome text not null,
   	email text not null unique,
   	telefone text not null,
@@ -24,7 +24,8 @@ create table if not exists clientes (
   	uf text
 );
 
-create taid serial primary key,
+create table if not exists cobrancas(
+	id serial primary key,
   	cliente_id integer  not null references clientes (id),
   	nome text not null,
   	descricao text not null,
