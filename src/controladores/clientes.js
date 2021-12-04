@@ -78,15 +78,15 @@ const listarClientes = async (req, res) => {
 
   const agora = new Date();
   const dataFormatada = datefns.format(agora, "yyy-MM-dd");
-  
+
   try {
-    const {rows: clientes} = await conexao.query(
+    const { rows: clientes } = await conexao.query(
       "select * from clientes left join cobrancas on clientes.id = cobrancas.cliente_id"
     );
 
-    for (cliente of clientes){
-      if (cliente.paga === false){
-        if (cliente.data_vencimento < dataFormatada){
+    for (cliente of clientes) {
+      if (cliente.paga === false) {
+        if (cliente.data_vencimento < dataFormatada) {
           cliente.status = 'Inadimplente'
         } else {
           cliente.status = 'Em dia'
@@ -94,7 +94,7 @@ const listarClientes = async (req, res) => {
       } else {
         cliente.status = 'Em dia'
       }
-    } 
+    }
     return res.status(200).json(clientes);
   } catch (error) {
     return res.status(404).json({ mensagem: error.message });

@@ -27,7 +27,9 @@ rotas.get("/cliente/:id", clientes.detalharCliente);
 rotas.put("/cliente/:id", clientes.editarCliente);
 
 // cobrancas
+rotas.post('/cobrancas/:idCliente', cobrancas.cadastroCobranca);
 rotas.get('/cobrancas', cobrancas.listarCobrancas);
 rotas.get('/cobrancas/:idCliente', cobrancas.listarCobrancasDeCadaCliente);
+
 
 module.exports = rotas;
