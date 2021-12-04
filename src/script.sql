@@ -24,8 +24,7 @@ create table if not exists clientes (
   	uf text
 );
 
-create table if not exists cobrancas (
-	id serial primary key,
+create taid serial primary key,
   	cliente_id integer  not null references clientes (id),
   	nome text not null,
   	descricao text not null,
