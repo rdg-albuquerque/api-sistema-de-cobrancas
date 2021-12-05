@@ -8,7 +8,7 @@ const listarCobrancas = async (req, res) => {
 
   try {
     const { rows: listaDeCobrancas } = await conexao.query(
-      "select * from cobrancas"
+      "select cobrancas.id, cliente_id, descricao, data_vencimento, valor, paga, clientes.nome as cliente_nome from cobrancas left join clientes on cobrancas.cliente_id = clientes.id"
     );
 
     for (let i = 0; i < listaDeCobrancas.length; i++) {

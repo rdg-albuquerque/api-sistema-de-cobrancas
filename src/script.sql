@@ -27,7 +27,6 @@ create table if not exists clientes (
 create table if not exists cobrancas(
 	id serial primary key,
   	cliente_id integer  not null references clientes (id),
-  	nome text not null,
   	descricao text not null,
   	data_vencimento text not null,
   	valor text not null,
