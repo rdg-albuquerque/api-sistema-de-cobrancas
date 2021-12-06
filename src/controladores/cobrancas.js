@@ -60,17 +60,16 @@ const listarCobrancasDeCadaCliente = async (req, res) => {
 
 const cadastroCobranca = async (req, res) => {
   const { idCliente } = req.params;
-  const { nome, descricao, data_vencimento, valor, paga } = req.body;
+  const { descricao, data_vencimento, valor, paga } = req.body;
 
   try {
     await schemaCadastroCobranca.validate(req.body);
 
     const query =
-      "insert into cobrancas (cliente_id ,nome, descricao, data_vencimento, valor, paga) values ($1, $2, $3, $4, $5, $6)";
+      "insert into cobrancas (cliente_id, descricao, data_vencimento, valor, paga) values ($1, $2, $3, $4, $5)";
 
     const cobrancaCadastrada = await conexao.query(query, [
       idCliente,
-      nome,
       descricao,
       data_vencimento,
       valor,

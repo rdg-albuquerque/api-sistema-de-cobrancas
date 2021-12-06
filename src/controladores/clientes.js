@@ -138,7 +138,6 @@ const editarCliente = async (req, res) => {
     } = await conexao.query("select * from clientes where id = $1", [
       id_cliente,
     ]);
-    console.log(cliente);
     if (email !== cliente.email) {
       const { rowCount: qtdEmails } = await conexao.query(
         "select * from clientes where email = $1",
