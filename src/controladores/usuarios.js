@@ -70,7 +70,7 @@ const atualizarUsuario = async (req, res) => {
         });
       }
     }
-    if (cpf !== usuario.cpf) {
+    if (cpf.length && cpf !== usuario.cpf) {
       const validarCPF = await conexao.query(
         "select * from usuarios where cpf = $1",
         [cpf]
