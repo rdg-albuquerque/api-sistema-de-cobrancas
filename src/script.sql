@@ -1,6 +1,7 @@
 create database desafio_final;
 
-create table if not exists usuarios (
+drop table if exists usuarios;
+create table usuarios (
 	id serial primary key,
   	nome text not null,
   	email text not null unique,
@@ -9,9 +10,10 @@ create table if not exists usuarios (
   	telefone text 
 );
 
-create table if not exists clientes (
+drop table if exists clientes;
+create table clientes (
 	id serial primary key,
-  	usuario_id integer not null references usuarios (id),
+	inadimplencia boolean default false,
   	nome text not null,
   	email text not null unique,
   	telefone text not null,
@@ -22,4 +24,14 @@ create table if not exists clientes (
   	bairro text,
   	cidade text,
   	uf text
+);
+
+drop table if exists cobrancas;
+create table cobrancas(
+	id serial primary key,
+  	cliente_id integer  not null references clientes (id),
+  	descricao text not null,
+  	data_vencimento text not null,
+  	valor text not null,
+  	paga boolean not null 
 );

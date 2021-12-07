@@ -1,8 +1,11 @@
 const conexao = require("../conexao");
+const schemaEmail = require("../validacoes/shemaValidarEmail");
 
 const validarEmail = async (req, res) => {
   const { email } = req.body;
   try {
+    await schemaEmail.validate({ email });
+
     const { rowCount: quantidadeUsuarios } = await conexao.query(
       "select * from usuarios where email = $1",
       [email]
