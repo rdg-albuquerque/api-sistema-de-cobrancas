@@ -82,6 +82,8 @@ const cadastroCobranca = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   cadastroCobranca,
   listarCobrancas,

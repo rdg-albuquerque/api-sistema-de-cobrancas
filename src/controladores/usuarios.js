@@ -1,7 +1,6 @@
 const conexao = require("../conexao");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const segredo = require("../segredo");
 const schemaCadastroUsuario = require("../validacoes/schemaCadastroUsuarios");
 const schemaAtualizarUsuario = require("../validacoes/schemaAtualizarUsuarios");
 
