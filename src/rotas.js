@@ -31,6 +31,6 @@ rotas.post('/cobrancas/:idCliente', cobrancas.cadastroCobranca);
 rotas.get('/cobrancas', cobrancas.listarCobrancas);
 rotas.get('/cobrancas/:idCliente', cobrancas.listarCobrancasDeCadaCliente);
 rotas.get('/cobranca/:idCobranca', cobrancas.detalharCadaCobranca);
-
+rotas.delete('/excluir/:id', cobrancas.excluirCobrancas)
 
 module.exports = rotas;

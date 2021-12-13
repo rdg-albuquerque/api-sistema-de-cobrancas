@@ -117,10 +117,47 @@ const detalharCadaCobranca = async (req, res) => {
   }
 }
 
+const excluirCobrancas = async (req, res) => {
+  const {id} = req.params;
+  const agora = new Date();
+  const dataFormatada = datefns.format(agora, "yyy-MM-dd");
+
+  try {
+
+    const  {rows: cobranca, rowCount} = await conexao.query("select * from cobrancas where id = $1",
+    [id]);
+
+    if (rowCount === 0) {
+      return res.status(404).json({mensagem: 'cobranca não encontrado'});
+  }
+    
+    if (cobranca[0].paga === true){
+      return res.status(404).json({mensagem: 'essa cobranca não pode ser excluida'});
+    }
+  
+    if (cobranca[0].data_vencimento < dataFormatada){
+      return res.status(404).json({mensagem: 'essa cobranca não pode ser excluida'});
+    }
+    
+    const excluir = await conexao.query('delete from cobrancas where id = $1', [id]);
+
+    if (excluir.rowCount === 0) {
+      return res.status(404).json({mensagem: 'Não foi possível excluir o produto'});
+  }
+
+    return res.status(200).json({mensagem: 'Cobrança excluida com sucesso'});
+
+  } catch (error) {
+    return res.status(404).json({ mensagem: error.message });
+  }
+
+
+}
 
 module.exports = {
   cadastroCobranca,
   listarCobrancas,
   listarCobrancasDeCadaCliente,
-  detalharCadaCobranca
+  detalharCadaCobranca,
+  excluirCobrancas
 };
