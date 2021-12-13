@@ -1,16 +1,14 @@
 const conexao = require("../conexao");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const segredo = require("../segredo");
 const schemaCadastroUsuario = require("../validacoes/schemaCadastroUsuarios");
 const schemaAtualizarUsuario = require("../validacoes/schemaAtualizarUsuarios");
 
 const cadastrarUsuario = async (req, res) => {
+  try {
   const { nome, email, senha } = req.body;
 
-  try {
     await schemaCadastroUsuario.validate(req.body);
-
     const { rowCount: quantidadeUsuarios } = await conexao.query(
       "select * from usuarios where email = $1",
       [email]
@@ -37,9 +35,10 @@ const cadastrarUsuario = async (req, res) => {
         .status(400)
         .json({ mensagem: "Não foi possivel cadastar o usuário" });
     }
-
+    console.log('passei pelo final');
     return res.status(201).json();
   } catch (error) {
+    console.log('cai no catch');
     return res.status(400).json({ mensagem: error.message });
   }
 };

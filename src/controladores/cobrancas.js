@@ -11,6 +11,7 @@ const listarCobrancas = async (req, res) => {
       "select cobrancas.id, cliente_id, descricao, data_vencimento, valor, paga, clientes.nome as cliente_nome from cobrancas left join clientes on cobrancas.cliente_id = clientes.id"
     );
 
+
     for (let i = 0; i < listaDeCobrancas.length; i++) {
       if (listaDeCobrancas[i].paga === false) {
         if (listaDeCobrancas[i].data_vencimento < dataFormatada) {
@@ -23,8 +24,10 @@ const listarCobrancas = async (req, res) => {
       }
     }
 
+
     return res.status(200).json(listaDeCobrancas);
   } catch (error) {
+    console.log('cai no catch');
     return res.status(404).json({ mensagem: error.message });
   }
 };
@@ -111,10 +114,80 @@ const editarCobranca = async (req, res) => {
     return res.status(404).json({ mensagem: error.message });
   }
 };
+const detalharCadaCobranca = async (req, res) => {
+  const { idCobranca } = req.params;
+  const agora = new Date();
+  const dataFormatada = datefns.format(agora, "yyy-MM-dd");
+
+  try {
+    const { rows: buscarCobranca, rowCount } = await conexao.query(
+      "select * from cobrancas where id = $1",
+      [idCobranca]
+    );
+
+    if (rowCount === 0) {
+      return res.status(404).json({ mensagem: "cobranca não encontrado" });
+    }
+
+    if (buscarCobranca[0].paga === false) {
+      if (buscarCobranca[0].data_vencimento < dataFormatada) {
+        buscarCobranca[0].status = "Vencida";
+      } else {
+        buscarCobranca[0].status = "Pendente";
+      }
+    } else {
+      buscarCobranca[0].status = "Paga";
+    }
+
+
+    return res.status(200).json(buscarCobranca);
+  } catch (error) {
+    return res.status(404).json({ mensagem: error.message });
+  }
+}
+
+const excluirCobrancas = async (req, res) => {
+  const { id } = req.params;
+  const agora = new Date();
+  const dataFormatada = datefns.format(agora, "yyy-MM-dd");
+
+  try {
+
+    const { rows: cobranca, rowCount } = await conexao.query("select * from cobrancas where id = $1",
+      [id]);
+
+    if (rowCount === 0) {
+      return res.status(404).json({ mensagem: 'cobranca não encontrado' });
+    }
+
+    if (cobranca[0].paga === true) {
+      return res.status(404).json({ mensagem: 'essa cobranca não pode ser excluida' });
+    }
+
+    if (cobranca[0].data_vencimento < dataFormatada) {
+      return res.status(404).json({ mensagem: 'essa cobranca não pode ser excluida' });
+    }
+
+    const excluir = await conexao.query('delete from cobrancas where id = $1', [id]);
+
+    if (excluir.rowCount === 0) {
+      return res.status(404).json({ mensagem: 'Não foi possível excluir o produto' });
+    }
+
+    return res.status(200).json({ mensagem: 'Cobrança excluida com sucesso' });
+
+  } catch (error) {
+    return res.status(404).json({ mensagem: error.message });
+  }
+
+
+}
 
 module.exports = {
   cadastroCobranca,
   listarCobrancas,
   listarCobrancasDeCadaCliente,
-  editarCobranca
+  editarCobranca,
+  detalharCadaCobranca,
+  excluirCobrancas
 };
