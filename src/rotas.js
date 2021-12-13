@@ -30,6 +30,7 @@ rotas.put("/cliente/:id", clientes.editarCliente);
 rotas.post('/cobrancas/:idCliente', cobrancas.cadastroCobranca);
 rotas.get('/cobrancas', cobrancas.listarCobrancas);
 rotas.get('/cobrancas/:idCliente', cobrancas.listarCobrancasDeCadaCliente);
+rotas.put('/cobrancas/:idCliente', cobrancas.editarCobranca);
 
 
 module.exports = rotas;

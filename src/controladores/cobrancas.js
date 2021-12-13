@@ -82,8 +82,39 @@ const cadastroCobranca = async (req, res) => {
   }
 };
 
+const editarCobranca = async (req, res) => {
+  const { idCliente } = req.params;
+  const { descricao, data_vencimento, valor, paga } = req.body;
+
+  try {
+    await schemaCadastroCobranca.validate(req.body);
+
+    const query =
+      "update cobrancas set (descricao, data_vencimento, valor, paga) = ($1, $2, $3, $4) where id = $5";
+
+    const cobrancaEditada = await conexao.query(query, [
+      descricao,
+      data_vencimento,
+      valor,
+      paga,
+      idCliente,
+    ]);
+
+    if (cobrancaEditada.rowCount === 0) {
+      return res
+        .status(404)
+        .json({ mensagem: "Não foi possível editar a cobrança" });
+    }
+
+    return res.status(200).json(cobrancaEditada);
+  } catch (error) {
+    return res.status(404).json({ mensagem: error.message });
+  }
+};
+
 module.exports = {
   cadastroCobranca,
   listarCobrancas,
   listarCobrancasDeCadaCliente,
+  editarCobranca
 };
