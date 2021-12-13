@@ -1,11 +1,14 @@
+const env = require("dotenv");
+const { parsed } = env.config();
+
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  user: parsed.DB_USER,
+  host: parsed.DB_HOST,
+  database: parsed.DB_NAME,
+  password: parsed.DB_PASSWORD,
+  port: parsed.DB_PORT,
 });
 
 const query = (text, param) => {
