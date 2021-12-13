@@ -91,11 +91,14 @@ const detalharCadaCobranca = async (req, res) => {
   const dataFormatada = datefns.format(agora, "yyy-MM-dd");
 
   try {
-    const {rows: buscarCobranca} = await conexao.query(
+    const {rows: buscarCobranca, rowCount} = await conexao.query(
       "select * from cobrancas where id = $1",
       [idCobranca]
     );
 
+    if (rowCount === 0) {
+      return res.status(404).json({ mensagem: "cobranca não encontrado" });
+    }
 
     if (buscarCobranca[0].paga === false) {
       if (buscarCobranca[0].data_vencimento < dataFormatada) {
@@ -107,9 +110,6 @@ const detalharCadaCobranca = async (req, res) => {
       buscarCobranca[0].status = "Paga";
     }    
 
-    if (buscarCobranca.rowCount === 0) {
-      return res.status(404).json({ mensagem: "cobranca não encontrado" });
-    }
 
     return res.status(200).json(buscarCobranca);
   } catch (error) {
