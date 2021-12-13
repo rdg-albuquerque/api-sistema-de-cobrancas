@@ -27,12 +27,12 @@ rotas.get("/cliente/:id", clientes.detalharCliente);
 rotas.put("/cliente/:id", clientes.editarCliente);
 
 // cobrancas
-rotas.post('/cobrancas/:idCliente', cobrancas.cadastroCobranca);
-rotas.get('/cobrancas', cobrancas.listarCobrancas);
-rotas.get('/cobrancas/:idCliente', cobrancas.listarCobrancasDeCadaCliente);
-rotas.put('/cobrancas/:idCliente', cobrancas.editarCobranca);
+rotas.post("/cobrancas/:idCliente", cobrancas.cadastroCobranca);
+rotas.get("/cobrancas", cobrancas.listarCobrancas);
+rotas.get("/cobrancas/:idCliente", cobrancas.listarCobrancasDeCadaCliente);
+rotas.put("/cobrancas/:idCobranca", cobrancas.editarCobranca);
 
-rotas.get('/cobranca/:idCobranca', cobrancas.detalharCadaCobranca);
-rotas.delete('/excluir/:id', cobrancas.excluirCobrancas)
+rotas.get("/cobranca/:idCobranca", cobrancas.detalharCadaCobranca);
+rotas.delete("/excluir/:id", cobrancas.excluirCobrancas);
 
 module.exports = rotas;
