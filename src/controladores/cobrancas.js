@@ -86,7 +86,7 @@ const cadastroCobranca = async (req, res) => {
 };
 
 const editarCobranca = async (req, res) => {
-  const { idCliente } = req.params;
+  const { idCobranca } = req.params;
   const { descricao, data_vencimento, valor, paga } = req.body;
 
   try {
@@ -100,7 +100,7 @@ const editarCobranca = async (req, res) => {
       data_vencimento,
       valor,
       paga,
-      idCliente,
+      idCobranca,
     ]);
 
     if (cobrancaEditada.rowCount === 0) {
