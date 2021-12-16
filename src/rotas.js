@@ -33,6 +33,6 @@ rotas.get("/cobrancas/:idCliente", cobrancas.listarCobrancasDeCadaCliente);
 rotas.put("/cobrancas/:idCobranca", cobrancas.editarCobranca);
 
 rotas.get("/cobranca/:idCobranca", cobrancas.detalharCadaCobranca);
-rotas.delete("/excluir/:id", cobrancas.excluirCobrancas);
+rotas.delete("/cobrancas/:id", cobrancas.excluirCobrancas);
 
 module.exports = rotas;
