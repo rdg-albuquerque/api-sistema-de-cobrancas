@@ -6,7 +6,7 @@ const schemaAtualizarUsuario = require("../validacoes/schemaAtualizarUsuarios");
 
 const cadastrarUsuario = async (req, res) => {
   try {
-  const { nome, email, senha } = req.body;
+    const { nome, email, senha } = req.body;
 
     await schemaCadastroUsuario.validate(req.body);
     const { rowCount: quantidadeUsuarios } = await conexao.query(
@@ -35,10 +35,10 @@ const cadastrarUsuario = async (req, res) => {
         .status(400)
         .json({ mensagem: "Não foi possivel cadastar o usuário" });
     }
-    console.log('passei pelo final');
+    console.log("passei pelo final");
     return res.status(201).json();
   } catch (error) {
-    console.log('cai no catch');
+    console.log("cai no catch");
     return res.status(400).json({ mensagem: error.message });
   }
 };
@@ -69,7 +69,7 @@ const atualizarUsuario = async (req, res) => {
         });
       }
     }
-    if (cpf.length && cpf !== usuario.cpf) {
+    if (cpf && cpf !== usuario.cpf) {
       const validarCPF = await conexao.query(
         "select * from usuarios where cpf = $1",
         [cpf]
