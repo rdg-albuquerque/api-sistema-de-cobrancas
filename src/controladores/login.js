@@ -1,7 +1,6 @@
 const conexao = require("../conexao");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const segredo = require("../segredo");
 const schemaLogin = require("../validacoes/schemaLogin");
 
 const login = async (req, res) => {
@@ -34,7 +33,7 @@ const login = async (req, res) => {
       return res.status(400).json({ mensagem: "Usuário ou senha inválidos" });
     }
 
-    const token = jwt.sign({ id }, segredo, { expiresIn: "2h" });
+    const token = jwt.sign({ id }, process.env.SECRET_KEY, { expiresIn: "2h" });
     return res
       .status(201)
       .json({ token, dados_usuario: { nome, email, cpf, telefone } });

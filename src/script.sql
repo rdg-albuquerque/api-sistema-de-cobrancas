@@ -32,6 +32,6 @@ create table cobrancas(
   	cliente_id integer  not null references clientes (id),
   	descricao text not null,
   	data_vencimento text not null,
-  	valor text not null,
+  	valor integer not null,
   	paga boolean not null 
 );
