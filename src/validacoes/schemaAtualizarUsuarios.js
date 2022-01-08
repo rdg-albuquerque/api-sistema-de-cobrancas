@@ -7,7 +7,7 @@ const schemaAtualizarUsuario = yup.object().shape({
     is: (senha) => senha.length > 0,
     then: yup.string().min(5),
   }),
-  cpf: yup.string(),
+  cpf: yup.string().nullable(),
   telefone: yup.string(),
 });
 
